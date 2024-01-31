@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "reida": "reidaprova",
+    "default": "reidaprova"
+  },
+  "targets": {},
+  "etags": {}
+}
