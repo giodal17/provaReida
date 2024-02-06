@@ -2,7 +2,14 @@
 
 <div *ngIf="!(loading$ | async) ">
 <div class="container-fluid d-flex flex-column align-items-center justify-content-center" id="body" *ngIf="numTentativi > 0">
-  <h1 class="titolo text-center mt-8 mb-4">Ciao squadra!</h1>
+  <div class="logo_container">
+    <img src="assets/logo.png" class="background-overlay-1">
+  </div>
+  <div class="image-container">
+    <img src="assets/fucile.gif" class="original-image">
+    <img src="assets/fucile.gif" class="mirrored-image">
+  </div>
+  <h1 class="titolo text-center mt-8 mb-4">CIAO SQUADRA!</h1>
   <form [formGroup]="form" (ngSubmit)="onSubmit(form)" class="form">
     <div class="form-group">
       <label for="risposta" class="risposta text-center-label">Risposta</label>

@@ -15,6 +15,8 @@
 
 .titolo {
     cursor: default;
+    font-size: 20px;
+    text-shadow: 2px 2px 4px rgba(28, 87, 0, 0.5);
 }
 
 .risposta {
@@ -54,10 +56,39 @@
 }
 
 .footer {
-    background-color: rgb(0, 73, 0);
+    background-color: rgb(0, 81, 0);
     width: 100%;
     color: whitesmoke;
     text-align: center;
+}
+
+.logo_container {
+    background-color: black;
+    animation: changeColor 20s infinite;
+    width: 200px;
+    height: auto; 
+    overflow: hidden;
+    position: relative;
+}
+
+.logo_container .background-overlay-1 {
+    width: 100%; 
+    height: auto; 
+    max-width: 100%; 
+}
+
+.image-container {
+    display: flex;
+}
+  
+.original-image, .mirrored-image {
+    width: 150px; 
+    height: auto; 
+    margin-right: 10px; 
+}
+  
+.mirrored-image {
+    transform: scaleX(-1);
 }
 
 @keyframes changeColor {
