@@ -2,12 +2,20 @@
     100% { transform: rotate(359deg); }
 }
 
+@keyframes changeColor {
+    50% {
+        background-color: rgb(0, 81, 0);
+    }
+}
+
 #star {
     animation: spin 2s linear infinite;
 }
 
-#body {
+#main-container {
     height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
     animation: changeColor 20s infinite;
     background-color: black;
     color: white;
@@ -57,6 +65,7 @@
 
 .footer {
     background-color: rgb(0, 81, 0);
+    
     width: 100%;
     color: whitesmoke;
     text-align: center;
@@ -89,10 +98,4 @@
   
 .mirrored-image {
     transform: scaleX(-1);
-}
-
-@keyframes changeColor {
-    50% {
-        background-color: rgb(0, 81, 0);
-    }
 }
