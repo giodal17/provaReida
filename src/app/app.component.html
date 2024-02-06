@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+<div *ngIf="!(loading$ | async) ">
 <div class="container-fluid d-flex flex-column align-items-center justify-content-center" id="body" *ngIf="numTentativi > 0">
   <h1 class="titolo text-center mt-8 mb-4">Ciao squadra!</h1>
   <form [formGroup]="form" (ngSubmit)="onSubmit(form)" class="form">
@@ -10,6 +11,7 @@
     </div>
     <button type="submit" class="btn btn-primary btn-block mt-6 custom-btn" [disabled]="!form.valid || numTentativi == 0">Invia</button>
   </form>
+</div>
 </div>
 <footer class="footer">Powered by Giovanni D'Alessandro</footer>
 

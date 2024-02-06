@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccessService } from '../services/access.service';
 import { AccessJson } from '../models/accessJson';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
   idAccesso = "";
   idOggettoDbRest = "";
   intruder = false;
-  constructor(public fb: FormBuilder, private service: AccessService) {
+  loading$ = this.loader.loading$;  //collegamento con la variabile del servizio
+  constructor(public fb: FormBuilder, private service: AccessService, public loader: LoadingService) {
     this.form = this.fb.group({
       risposta: ['', [Validators.required]],
     });
@@ -74,16 +76,33 @@ export class AppComponent implements OnInit {
     //     this.success = localStorage.getItem('success') === 'true';
     //     this.numTentativi = this.getNumTentativifromStorage();
   }
-  decreaseNumTentativi(json: AccessJson){
+  decreaseNumTentativi(){
     if(this.numTentativi != 0){
-      this.numTentativi--;
-    }
-    return this.service.updateAccess(this.idOggettoDbRest, json).subscribe(console.log);
+        this.numTentativi--;
+      }
+      const json: AccessJson = {
+      access: true,
+      id: this.idAccesso,
+      nTentativi: this.numTentativi,
+      success: false
+    };
+    return this.service.updateAccess(this.idOggettoDbRest, json);
     }
 
   onSubmit(form: FormGroup) {
     if (form.value.risposta) {
       let risposta: string = form.value.risposta;
+      this.service.getAccess().subscribe(res => {
+        this.access = res[0].access;
+        this.idAccesso = res[0].id;
+        this.idOggettoDbRest = res[0]._id;
+        this.numTentativi = res[0].nTentativi;
+        this.success = res[0].success;  
+        this.numTentativi--;
+        if(this.numTentativi < 0){
+        this.intruder = true;
+        return;
+      }
       if (risposta.toLowerCase() == 'reida') {
         const json: AccessJson = {
           access: true,
@@ -92,21 +111,18 @@ export class AppComponent implements OnInit {
           success: true
         };
         this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
-          next: () =>{ this.ngOnInit() }
+          next: () =>{ this.ngOnInit() 
+             return;}
         }
         );
-        return;
+      
       }
-      const json: AccessJson = {
-      access: true,
-      id: this.idAccesso,
-      nTentativi: this.numTentativi,
-      success: false
-    };
-    this.decreaseNumTentativi(json);
-    form.reset();
+    })
+      
+    this.decreaseNumTentativi().subscribe({next: () => {
+      form.reset()}})}
     }
-  }
+  
 
   // getNumTentativifromStorage() {
   //   this.varStorageNumTentativi = localStorage.getItem('numTentativi');
@@ -144,7 +160,8 @@ export class AppComponent implements OnInit {
     this.service.updateAccess(this.idOggettoDbRest,json).subscribe({ next: () => { 
       localStorage.clear();
       this.ngOnInit();
+      this.intruder = false;
     }});
-    
   }
+
 }
