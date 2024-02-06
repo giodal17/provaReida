@@ -1,8 +1,67 @@
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% {  transform: rotate(359deg); }
+    100% { transform: rotate(359deg); }
 }
+
 #star {
     animation: spin 2s linear infinite;
+}
 
+#body {
+    height: 100vh;
+    animation: changeColor 20s infinite;
+    background-color: black;
+    color: white;
+}
+
+.titolo {
+    cursor: default;
+}
+
+.risposta {
+    margin-bottom: 10%;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    cursor: default;
+}
+
+#risposta {
+    margin: 10px 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: box-shadow 0.3s, border 0.3s;
+    cursor: pointer;
+}
+
+#risposta:focus {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+#help {
+    cursor: default;
+}
+
+.text-muted {
+    color: white !important;
+}
+
+.custom-btn {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+    cursor: pointer;
+}
+
+.footer {
+    background-color: rgb(0, 73, 0);
+    width: 100%;
+    color: whitesmoke;
+    text-align: center;
+}
+
+@keyframes changeColor {
+    50% {
+        background-color: rgb(0, 81, 0);
+    }
 }
