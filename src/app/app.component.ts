@@ -32,7 +32,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
 
-
     
 
     // this.success = localStorage.getItem("success") == "true";
@@ -40,22 +39,22 @@ export class AppComponent implements OnInit {
     // if(this.success){
     //   this.numTentativi = 0;
     // }
-    // this.service.getAccess().subscribe((res) => {
-    //   this.access = res[0].access;
-    //   this.idAccesso = res[0].id;
-    //   this.idOggettoDbRest = res[0]._id;
-    //   this.numTentativi = res[0].nTentativi;
-    //   this.success = res[0].success;
+    this.service.getAccess().subscribe((res) => {
+      this.access = res[0].access;
+      this.idAccesso = res[0].id;
+      this.idOggettoDbRest = res[0]._id;
+      this.numTentativi = res[0].nTentativi;
+      this.success = res[0].success;
 
-    //   if (!this.access && this.idAccesso === "") {
-    //     this.updateFirstAccess();
-    //     // this.checkTentativi();
-    //     return;      
-    //   }
+      if (!this.access && this.idAccesso === "") {
+        this.updateFirstAccess();
+        // this.checkTentativi();
+        return;      
+      }
       
-    //   if(this.access && this.idAccesso != ""){
-    //     //implementare quando deve controllare la sessione e intruder
-    //   }
+      if(this.access && this.idAccesso != ""){
+        //implementare quando deve controllare la sessione e intruder
+      }
 
     
     // // if (this.idAccesso === localStorage.getItem("idAccess")) {
@@ -63,15 +62,15 @@ export class AppComponent implements OnInit {
     // //     return;
     // // }
 
-    // if(this.idAccesso == "-1"){
-    //   this.numTentativi = 0;
-    //   this.intruder = true;
-    // }
+    if(this.idAccesso == "-1"){
+      this.numTentativi = 0;
+      this.intruder = true;
+    }
     // // localStorage.setItem("idAccess", "-1")
     // // localStorage.setItem('numTentativi', '0');
     // // localStorage.setItem('success', 'false');
     
-    // });
+    });
   }
 
   checkTentativi(){
