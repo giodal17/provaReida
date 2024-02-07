@@ -8,6 +8,9 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { AdminComponent } from './components/admin/admin.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { SpinnerInterceptor } from '../interceptor/spinner.interceptor';
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +23,7 @@ import { SpinnerInterceptor } from '../interceptor/spinner.interceptor';
     AppRoutingModule,
     ReactiveFormsModule, 
     HttpClientModule,
-    
+    AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [HttpClient, 
     {provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true}],
