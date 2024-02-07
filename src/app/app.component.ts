@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccessService } from '../services/access.service';
 import { AccessJson } from '../models/accessJson';
 import { LoadingService } from '../services/loading.service';
+import { FirebaseService } from '../services/firebase.service';
+
 
 @Component({
   selector: 'app-root',
@@ -10,7 +12,6 @@ import { LoadingService } from '../services/loading.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  varPassAdmin = "17022001"
   title = 'reidaSatWeb';
   form: FormGroup;
   numTentativi: number = -1;
@@ -18,10 +19,9 @@ export class AppComponent implements OnInit {
   success = false;
   access = false;
   idAccesso = "";
-  idOggettoDbRest = "";
   intruder = false;
-  loading$ = this.loader.loading$;  //collegamento con la variabile del servizio
-  constructor(public fb: FormBuilder, private service: AccessService, public loader: LoadingService) {
+    
+  constructor(public fb: FormBuilder, public loader: LoadingService, public firebaseDb: FirebaseService) {
     this.form = this.fb.group({
       risposta: ['', [Validators.required]],
     });
@@ -29,11 +29,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.success = localStorage.getItem("success") == "true";
-
-    // if(this.success){
-    //   this.numTentativi = 0;
-    // }
     this.service.getAccess().subscribe((res) => {
       this.access = res[0].access;
       this.idAccesso = res[0].id;
@@ -42,8 +37,9 @@ export class AppComponent implements OnInit {
       this.success = res[0].success;
 
       if (!this.access && this.idAccesso === "") {
+        console.log("primo accesso");
         this.updateFirstAccess();
-        // this.checkTentativi();
+      
         return;      
       }
       
@@ -51,20 +47,12 @@ export class AppComponent implements OnInit {
         //implementare quando deve controllare la sessione e intruder
       }
 
-    
-    // if (this.idAccesso === localStorage.getItem("idAccess")) {
-    //     this.checkTentativi();
-    //     return;
-    // }
 
     if(this.idAccesso == "-1"){
       this.numTentativi = 0;
       this.intruder = true;
     }
-    // localStorage.setItem("idAccess", "-1")
-    // localStorage.setItem('numTentativi', '0');
-    // localStorage.setItem('success', 'false');
-    
+   
     });
   }
 
@@ -78,7 +66,6 @@ export class AppComponent implements OnInit {
   }
   decreaseNumTentativi(){
     if(this.numTentativi != 0){
-        this.numTentativi--;
       }
       const json: AccessJson = {
       access: true,
@@ -86,18 +73,18 @@ export class AppComponent implements OnInit {
       nTentativi: this.numTentativi,
       success: false
     };
-    return this.service.updateAccess(this.idOggettoDbRest, json);
+    return this.firebaseDb.updateAccess(json);
+   
     }
 
   onSubmit(form: FormGroup) {
     if (form.value.risposta) {
       let risposta: string = form.value.risposta;
-      this.service.getAccess().subscribe(res => {
-        this.access = res[0].access;
-        this.idAccesso = res[0].id;
-        this.idOggettoDbRest = res[0]._id;
-        this.numTentativi = res[0].nTentativi;
-        this.success = res[0].success;  
+      this.firebaseDb.getAccess().subscribe(res => {
+        this.access = res[0]
+        this.idAccesso = res[1]
+        this.numTentativi = res[2]
+        this.success = res[3]  
         this.numTentativi--;
         if(this.numTentativi < 0){
         this.intruder = true;
@@ -110,28 +97,19 @@ export class AppComponent implements OnInit {
           nTentativi: 0,
           success: true
         };
-        this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
-          next: () =>{ this.ngOnInit() 
-             return;}
-        }
-        );
-      
+        this.firebaseDb.updateAccess(json).then(()=> {
+          this.ngOnInit() 
+             return;
+        })      
       }
+      this.decreaseNumTentativi().then(() => {
+      form.reset()})
     })
       
-    this.decreaseNumTentativi().subscribe({next: () => {
-      form.reset()}})}
+    }
     }
   
 
-  // getNumTentativifromStorage() {
-  //   this.varStorageNumTentativi = localStorage.getItem('numTentativi');
-  //   return parseInt(this.varStorageNumTentativi!);
-  // }
-  // setNumTentativiInStorage() {
-  //   this.varStorageNumTentativi = this.numTentativi.toString();
-  //   localStorage.setItem('numTentativi', this.varStorageNumTentativi);
-  // }
   updateFirstAccess() {
     const json: AccessJson = {
       access: true,
@@ -140,28 +118,25 @@ export class AppComponent implements OnInit {
       success: false
     };
     this.idAccesso = json.id + "";
-    localStorage.setItem("idAccesso", this.idAccesso)
-    this.service.updateAccess(this.idOggettoDbRest, json).subscribe(console.log);
+    localStorage.setItem("idAccesso", this.idAccesso);
+    this.firebaseDb.updateAccess(json).then(res => console.log(res))
   }
 
   resetAccess() {
     this.numTentativi = 3;
     this.success = false;
-    // localStorage.setItem("success", "false");
-    // localStorage.setItem("idAccess", "");
     this.form.controls['risposta'].reset();
-    //this.setNumTentativiInStorage();
     const json: AccessJson = {
       access: false,
       id: "",
       nTentativi: 3,
       success: false
     };
-    this.service.updateAccess(this.idOggettoDbRest,json).subscribe({ next: () => { 
+    this.firebaseDb.updateAccess(json).then(() => { 
       localStorage.clear();
       this.ngOnInit();
       this.intruder = false;
-    }});
+    });
   }
 
 }
