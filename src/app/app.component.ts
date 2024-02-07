@@ -29,11 +29,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.success = localStorage.getItem("success") == "true";
-
-    // if(this.success){
-    //   this.numTentativi = 0;
-    // }
     this.service.getAccess().subscribe((res) => {
       this.access = res[0].access;
       this.idAccesso = res[0].id;
@@ -43,7 +38,7 @@ export class AppComponent implements OnInit {
 
       if (!this.access && this.idAccesso === "") {
         this.updateFirstAccess();
-        // this.checkTentativi();
+      
         return;      
       }
       
@@ -51,31 +46,15 @@ export class AppComponent implements OnInit {
         //implementare quando deve controllare la sessione e intruder
       }
 
-    
-    // if (this.idAccesso === localStorage.getItem("idAccess")) {
-    //     this.checkTentativi();
-    //     return;
-    // }
 
     if(this.idAccesso == "-1"){
       this.numTentativi = 0;
       this.intruder = true;
     }
-    // localStorage.setItem("idAccess", "-1")
-    // localStorage.setItem('numTentativi', '0');
-    // localStorage.setItem('success', 'false');
-    
+   
     });
   }
 
-  checkTentativi(){
-    
-    // if (isNaN(this.getNumTentativifromStorage())) {
-    //       localStorage.setItem('numTentativi', '3');
-    //     }
-    //     this.success = localStorage.getItem('success') === 'true';
-    //     this.numTentativi = this.getNumTentativifromStorage();
-  }
   decreaseNumTentativi(){
     if(this.numTentativi != 0){
         this.numTentativi--;
