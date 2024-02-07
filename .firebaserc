@@ -1,8 +1,15 @@
 {
   "projects": {
-    "reida": "reidaprova",
     "default": "reidaprova"
   },
-  "targets": {},
+  "targets": {
+    "reidaprova": {
+      "hosting": {
+        "provareida": [
+          "reidaprova"
+        ]
+      }
+    }
+  },
   "etags": {}
 }
