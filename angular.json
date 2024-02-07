@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "provaReida": {
+    "provareida": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -88,10 +88,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "provaReida:build:production"
+              "buildTarget": "provareida:build:production"
             },
             "development": {
-              "buildTarget": "provaReida:build:development"
+              "buildTarget": "provareida:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -99,7 +99,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "provaReida:build"
+            "buildTarget": "provareida:build"
           }
         },
         "test": {
@@ -119,6 +119,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "provareida:build:production",
+              "serveTarget": "provareida:serve:production"
+            },
+            "development": {
+              "buildTarget": "provareida:build:development",
+              "serveTarget": "provareida:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
