@@ -1,27 +1,49 @@
-<div *ngIf="!(loading$ | async)">
-  <div class="container flex d-flex flex-column" *ngIf="numTentativi > 0">
-    <h1>Ciao squadra!</h1>
-    <form [formGroup] = "form" (ngSubmit)="onSubmit(form)">
-      <div class="form-group">
-        <label for="risposta">Risposta</label>
-        <input type="text" class="form-control" id="risposta" formControlName="risposta" aria-describedby="emailHelp" placeholder="Inserisci la risposta" autofocus>
-        <small id="help" class="form-text text-muted">Hai a disposizione {{numTentativi}} tentativi</small>
-      </div>
-      <button type="submit" class="btn btn-primary" [disabled]="!form.valid || numTentativi == 0">Invia</button>
-    </form>
-  </div>
-  <div class="alert alert-danger" *ngIf="numTentativi == 0 && success == false && intruder == false" role="alert">
+<div class="container flex d-flex flex-column" *ngIf="numTentativi > 0">
+  <h1>Ciao squadra!</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+    <div class="form-group">
+      <label for="risposta">Risposta</label>
+      <input
+        type="text"
+        class="form-control"
+        id="risposta"
+        formControlName="risposta"
+        aria-describedby="emailHelp"
+        placeholder="Inserisci la risposta"
+        autofocus
+      />
+      <small id="help" class="form-text text-muted"
+        >Hai a disposizione {{ numTentativi }} tentativi</small
+      >
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!form.valid || numTentativi == 0"
+    >
+      Invia
+    </button>
+  </form>
+
+  <div
+    class="alert alert-danger"
+    *ngIf="numTentativi == 0 && success == false && intruder == false"
+    role="alert"
+  >
     <h1>Hai cannato la prova!</h1>
   </div>
-  <div class="alert alert-success d-flex justify-content-center" *ngIf="success == true" role="alert">
+  <div
+    class="alert alert-success d-flex justify-content-center"
+    *ngIf="success == true"
+    role="alert"
+  >
     <h1>Hai superato la prova!</h1>
   </div>
-  
+
   <div class="alert alert-danger" *ngIf="intruder == true" role="alert">
     <h1>Sei un intruder!</h1>
   </div>
 </div>
 
 <!-- *ngIf="form.controls['risposta'].value == varPassAdmin" -->
-<div class="btn btn-primary"  (click)="resetAccess()">Clicca per resettare</div>
-<app-spinner></app-spinner>
+<div class="btn btn-primary" (click)="resetAccess()">Clicca per resettare</div>
