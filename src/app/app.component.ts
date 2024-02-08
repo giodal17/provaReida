@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   idAccesso = "";
   idOggettoDbRest = "";
   intruder = false;
+  isVisible: boolean = false;
   loading$ = this.loader.loading$;  //collegamento con la variabile del servizio
     constructor(public fb: FormBuilder, private service: AccessService, public loader: LoadingService, public firebaseDb: FirebaseService) {
     this.form = this.fb.group({
@@ -65,6 +66,7 @@ export class AppComponent implements OnInit {
     if(this.idAccesso == "-1"){
       this.numTentativi = 0;
       this.intruder = true;
+      this.isVisible = true;
     }
     // // localStorage.setItem("idAccess", "-1")
     // // localStorage.setItem('numTentativi', '0');
@@ -106,6 +108,7 @@ export class AppComponent implements OnInit {
         this.numTentativi--;
         if(this.numTentativi < 0){
         this.intruder = true;
+        this.isVisible = true;
         return;
       }
       if (risposta.toLowerCase() == 'reida') {
@@ -120,7 +123,11 @@ export class AppComponent implements OnInit {
              return;}
         }
         );
-      
+        this.isVisible = true;
+      }
+
+      if(risposta.toLowerCase() != 'reida' && this.numTentativi <= 0 ){
+        this.isVisible = true;
       }
     })
       
@@ -166,6 +173,7 @@ export class AppComponent implements OnInit {
       localStorage.clear();
       this.ngOnInit();
       this.intruder = false;
+      this.isVisible = false;
     }});
   }
 
