@@ -91,6 +91,7 @@ export class AppComponent implements OnInit {
 
         if (risposta.toLowerCase() == 'reida') {
           this.rispostaSbagliata = false;
+          this.success = true;
           const json: AccessJson = {
             access: true,
             id: this.idAccesso,
@@ -100,10 +101,9 @@ export class AppComponent implements OnInit {
           this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
             next: () => {
               this.ngOnInit();
-              return;
             },
           });
-          this.isVisible = true;
+          return;
         }
 
         this.rispostaSbagliata = true;
