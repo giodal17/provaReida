@@ -122,3 +122,20 @@
     background-color: black;
     color: white;
 }
+
+
+#error-message {
+    
+    animation: error-animation 0.5s ease-in-out;
+}
+
+@keyframes error-animation {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

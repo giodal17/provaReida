@@ -14,14 +14,19 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit(form)" class="form">
       <div class="form-group">
-        <label for="risposta" class="risposta text-center-label">Risposta</label>
         <input type="text" class="form-control" id="risposta" formControlName="risposta" placeholder="Inserisci la risposta" autofocus>
         <small id="help" class="form-text text-muted text-center">Hai a disposizione {{numTentativi}} tentativi</small>
       </div>
-
+    
       <button type="submit" class="btn btn-primary btn-block mt-6 custom-btn" [disabled]="!form.valid || numTentativi == 0">Invia</button>
-    </form>
+   
+    </form>  
+    <div *ngIf="rispostaSbagliata" id="error-message" class="alert alert-danger mt-3" role="alert">Risposta sbagliata! Riprova!</div>
+    
   </div>
+
+
+
 
   <div *ngIf="isVisible" class="container-fluid d-flex flex-column align-items-center justify-content-center" id="result-container">
     <div class="logo_container">
@@ -58,7 +63,7 @@
     </div>
   </div>
 
-  <footer class="footer">Powered by Giovanni D'Alessandro</footer>
+  <footer class="footer">Powered by Reida Sat</footer>
 </div>
 
 <app-spinner></app-spinner>

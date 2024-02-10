@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   intruder = false;
   isVisible: boolean = false;
   loading$ = this.loader.loading$;  //collegamento con la variabile del servizio
+  rispostaSbagliata: boolean = false;
     constructor(public fb: FormBuilder, private service: AccessService, public loader: LoadingService, public firebaseDb: FirebaseService) {
     this.form = this.fb.group({
       risposta: ['', [Validators.required]],
@@ -112,6 +113,7 @@ export class AppComponent implements OnInit {
         return;
       }
       if (risposta.toLowerCase() == 'reida') {
+        this.rispostaSbagliata = false;
         const json: AccessJson = {
           access: true,
           id: this.idAccesso,
@@ -125,6 +127,8 @@ export class AppComponent implements OnInit {
         );
         this.isVisible = true;
       }
+      
+      this.rispostaSbagliata = true;
 
       if(risposta.toLowerCase() != 'reida' && this.numTentativi <= 0 ){
         this.isVisible = true;
@@ -171,9 +175,11 @@ export class AppComponent implements OnInit {
     };
     this.service.updateAccess(this.idOggettoDbRest,json).subscribe({ next: () => { 
       localStorage.clear();
-      this.ngOnInit();
       this.intruder = false;
+      this.rispostaSbagliata = false;
       this.isVisible = false;
+      this.ngOnInit();
+     
     }});
   }
 
