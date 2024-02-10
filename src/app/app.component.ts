@@ -5,7 +5,6 @@ import { AccessJson } from '../models/accessJson';
 import { LoadingService } from '../services/loading.service';
 import { FirebaseService } from '../services/firebase.service';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,34 +12,31 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class AppComponent implements OnInit {
   // firestore: Firestore = inject(Firestore);
-  varPassAdmin = "17022001"
+  varPassAdmin = '17022001';
   title = 'reidaSatWeb';
   form: FormGroup;
   numTentativi: number = -1;
   varStorageNumTentativi: string | null = '';
   success = false;
   access = false;
-  idAccesso = "";
-  idOggettoDbRest = "";
+  idAccesso = '';
+  idOggettoDbRest = '';
   intruder = false;
   isVisible: boolean = false;
-  loading$ = this.loader.loading$;  //collegamento con la variabile del servizio
+  loading$ = this.loader.loading$; //collegamento con la variabile del servizio
   rispostaSbagliata: boolean = false;
-    constructor(public fb: FormBuilder, private service: AccessService, public loader: LoadingService, public firebaseDb: FirebaseService) {
+  constructor(
+    public fb: FormBuilder,
+    private service: AccessService,
+    public loader: LoadingService,
+    public firebaseDb: FirebaseService
+  ) {
     this.form = this.fb.group({
       risposta: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
-
-    
-
-    // this.success = localStorage.getItem("success") == "true";
-
-    // if(this.success){
-    //   this.numTentativi = 0;
-    // }
     this.service.getAccess().subscribe((res) => {
       this.access = res[0].access;
       this.idAccesso = res[0].id;
@@ -48,97 +44,82 @@ export class AppComponent implements OnInit {
       this.numTentativi = res[0].nTentativi;
       this.success = res[0].success;
 
-      if (!this.access && this.idAccesso === "") {
+      if (!this.access && this.idAccesso === '') {
         this.updateFirstAccess();
-        // this.checkTentativi();
-        return;      
+        return;
       }
-      
-      if(this.access && this.idAccesso != ""){
+
+      if (this.access && this.idAccesso != '') {
         //implementare quando deve controllare la sessione e intruder
       }
 
-    
-    // // if (this.idAccesso === localStorage.getItem("idAccess")) {
-    // //     this.checkTentativi();
-    // //     return;
-    // // }
-
-    if(this.idAccesso == "-1"){
-      this.numTentativi = 0;
-      this.intruder = true;
-      this.isVisible = true;
-    }
-    // // localStorage.setItem("idAccess", "-1")
-    // // localStorage.setItem('numTentativi', '0');
-    // // localStorage.setItem('success', 'false');
-    
+      if (this.idAccesso == '-1') {
+        this.numTentativi = 0;
+        this.intruder = true;
+        this.isVisible = true;
+      }
     });
   }
 
-  checkTentativi(){
-    
-    // if (isNaN(this.getNumTentativifromStorage())) {
-    //       localStorage.setItem('numTentativi', '3');
-    //     }
-    //     this.success = localStorage.getItem('success') === 'true';
-    //     this.numTentativi = this.getNumTentativifromStorage();
-  }
-  decreaseNumTentativi(){
-    if(this.numTentativi != 0){
-        this.numTentativi--;
-      }
-      const json: AccessJson = {
+  decreaseNumTentativi() {
+    if (this.numTentativi != 0) {
+      this.numTentativi--;
+    }
+    const json: AccessJson = {
       access: true,
       id: this.idAccesso,
       nTentativi: this.numTentativi,
-      success: false
+      success: false,
     };
     return this.service.updateAccess(this.idOggettoDbRest, json);
-    }
+  }
 
   onSubmit(form: FormGroup) {
     if (form.value.risposta) {
       let risposta: string = form.value.risposta;
-      this.service.getAccess().subscribe(res => {
+      this.service.getAccess().subscribe((res) => {
         this.access = res[0].access;
         this.idAccesso = res[0].id;
         this.idOggettoDbRest = res[0]._id;
         this.numTentativi = res[0].nTentativi;
-        this.success = res[0].success;  
-        this.numTentativi--;
-        if(this.numTentativi < 0){
-        this.intruder = true;
-        this.isVisible = true;
-        return;
-      }
-      if (risposta.toLowerCase() == 'reida') {
-        this.rispostaSbagliata = false;
-        const json: AccessJson = {
-          access: true,
-          id: this.idAccesso,
-          nTentativi: 0,
-          success: true
-        };
-        this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
-          next: () =>{ this.ngOnInit() 
-             return;}
-        }
-        );
-        this.isVisible = true;
-      }
-      
-      this.rispostaSbagliata = true;
+        this.success = res[0].success;
+        // if(this.numTentativi < 0){
+        // this.intruder = true;
+        // this.isVisible = true;
+        // return;
+        // }
 
-      if(risposta.toLowerCase() != 'reida' && this.numTentativi <= 0 ){
-        this.isVisible = true;
-      }
-    })
-      
-    this.decreaseNumTentativi().subscribe({next: () => {
-      form.reset()}})}
+        if (risposta.toLowerCase() == 'reida') {
+          this.rispostaSbagliata = false;
+          const json: AccessJson = {
+            access: true,
+            id: this.idAccesso,
+            nTentativi: 0,
+            success: true,
+          };
+          this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
+            next: () => {
+              this.ngOnInit();
+              return;
+            },
+          });
+          this.isVisible = true;
+        }
+
+        this.rispostaSbagliata = true;
+
+        if (risposta.toLowerCase() != 'reida' && this.numTentativi <= 0) {
+          this.isVisible = true;
+        }
+
+        this.decreaseNumTentativi().subscribe({
+          next: () => {
+            form.reset();
+          }
+        });
+      });
     }
-  
+  }
 
   // getNumTentativifromStorage() {
   //   this.varStorageNumTentativi = localStorage.getItem('numTentativi');
@@ -153,11 +134,13 @@ export class AppComponent implements OnInit {
       access: true,
       id: Math.round(Math.random() * 1000000) + '',
       nTentativi: 3,
-      success: false
+      success: false,
     };
-    this.idAccesso = json.id + "";
-    localStorage.setItem("idAccesso", this.idAccesso)
-    this.service.updateAccess(this.idOggettoDbRest, json).subscribe(console.log);
+    this.idAccesso = json.id + '';
+    localStorage.setItem('idAccesso', this.idAccesso);
+    this.service
+      .updateAccess(this.idOggettoDbRest, json)
+      .subscribe(console.log);
   }
 
   resetAccess() {
@@ -169,18 +152,18 @@ export class AppComponent implements OnInit {
     //this.setNumTentativiInStorage();
     const json: AccessJson = {
       access: false,
-      id: "",
+      id: '',
       nTentativi: 3,
-      success: false
+      success: false,
     };
-    this.service.updateAccess(this.idOggettoDbRest,json).subscribe({ next: () => { 
-      localStorage.clear();
-      this.intruder = false;
-      this.rispostaSbagliata = false;
-      this.isVisible = false;
-      this.ngOnInit();
-     
-    }});
+    this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
+      next: () => {
+        localStorage.clear();
+        // this.intruder = false;
+        this.rispostaSbagliata = false;
+        this.isVisible = false;
+        this.ngOnInit();
+      },
+    });
   }
-
 }
