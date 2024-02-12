@@ -75,6 +75,8 @@ export class AppComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
+    console.log(form.value);
+    
     if (form.value.risposta) {
       let risposta: string = form.value.risposta;
       this.service.getAccess().subscribe((res) => {
@@ -83,11 +85,10 @@ export class AppComponent implements OnInit {
         this.idOggettoDbRest = res[0]._id;
         this.numTentativi = res[0].nTentativi;
         this.success = res[0].success;
-        // if(this.numTentativi < 0){
-        // this.intruder = true;
-        // this.isVisible = true;
-        // return;
-        // }
+        if(this.numTentativi == 0){
+          this.ngOnInit();
+          return;
+        }
 
         if (risposta.toLowerCase() == 'reida') {
           this.rispostaSbagliata = false;
