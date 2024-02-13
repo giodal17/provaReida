@@ -10,13 +10,15 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { SpinnerInterceptor } from '../interceptor/spinner.interceptor';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
+import { QuizComponent } from './components/quiz/quiz.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    QuizComponent
   ],
   imports: [
     BrowserModule,
