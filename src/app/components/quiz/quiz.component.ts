@@ -70,6 +70,7 @@ export class QuizComponent implements OnInit {
       id: this.idAccesso,
       nTentativi: this.numTentativi,
       success: false,
+      _id: this.idOggettoDbRest
     };
     return this.service.updateAccess(this.idOggettoDbRest, json);
   }
@@ -98,6 +99,7 @@ export class QuizComponent implements OnInit {
             id: this.idAccesso,
             nTentativi: 0,
             success: true,
+            _id: this.idOggettoDbRest
           };
           this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
             next: () => {
@@ -122,20 +124,13 @@ export class QuizComponent implements OnInit {
     }
   }
 
-  // getNumTentativifromStorage() {
-  //   this.varStorageNumTentativi = localStorage.getItem('numTentativi');
-  //   return parseInt(this.varStorageNumTentativi!);
-  // }
-  // setNumTentativiInStorage() {
-  //   this.varStorageNumTentativi = this.numTentativi.toString();
-  //   localStorage.setItem('numTentativi', this.varStorageNumTentativi);
-  // }
   updateFirstAccess() {
     const json: AccessJson = {
       access: true,
       id: Math.round(Math.random() * 1000000) + '',
       nTentativi: 3,
       success: false,
+      _id: this.idOggettoDbRest
     };
     this.idAccesso = json.id + '';
     localStorage.setItem('idAccesso', this.idAccesso);
@@ -144,28 +139,6 @@ export class QuizComponent implements OnInit {
       .subscribe(console.log);
   }
 
-  resetAccess() {
-    this.numTentativi = 3;
-    this.success = false;
-    // localStorage.setItem("success", "false");
-    // localStorage.setItem("idAccess", "");
-    this.form.controls['risposta'].reset();
-    //this.setNumTentativiInStorage();
-    const json: AccessJson = {
-      access: false,
-      id: '',
-      nTentativi: 3,
-      success: false,
-    };
-    this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
-      next: () => {
-        localStorage.clear();
-        // this.intruder = false;
-        this.rispostaSbagliata = false;
-        this.isVisible = false;
-        this.ngOnInit();
-      },
-    });
-  }
+  
 }
 

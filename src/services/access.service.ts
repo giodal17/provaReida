@@ -6,7 +6,10 @@ import { AccessJson } from '../models/accessJson';
   providedIn: 'root',
 })
 export class AccessService {
-  constructor(private http: HttpClient) {}
+  
+  constructor(private http: HttpClient) {
+   
+  }
   
   getAccess() {
     const headers = new HttpHeaders({
