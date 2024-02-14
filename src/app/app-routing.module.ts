@@ -4,7 +4,7 @@ import { QuizComponent } from './components/quiz/quiz.component';
 import { AdminComponent } from './components/admin/admin.component';
 
 const routes: Routes = [
-  {path: '**', component: QuizComponent},
+  {path: '', component: QuizComponent},
   {path: 'admin', component: AdminComponent}
 ];
 
