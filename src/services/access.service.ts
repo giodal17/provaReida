@@ -15,7 +15,7 @@ export class AccessService {
     const headers = new HttpHeaders({
       'x-api-key': environment.xApiKey
     });
-    return this.http.get<any>(environment.urlToDb, { headers });
+    return this.http.get<any>(environment.urlToDbExpress, { headers });
   }
 
   updateAccess(idOggettoDbRest: string, json: AccessJson) {
@@ -23,7 +23,7 @@ export class AccessService {
       'x-api-key': environment.xApiKey
     });
     return this.http.put<any>(
-      `${environment.urlToDb}/${idOggettoDbRest}`,
+      `${environment.urlToDbExpress}/${idOggettoDbRest}`,
       json,
       { headers }
     );

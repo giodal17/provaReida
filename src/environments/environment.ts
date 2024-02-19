@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 export const environment = {
+  //urlToDbExpress: "http://localhost:3001/api",
+  urlToDbExpress:"https://reida-sat-express-server.onrender.com/api",
     urlToDb: "https://databasereida-240f.restdb.io/rest/db",
     xApiKey: "65bcbd653b43c210ffb720ca",
     firebaseConfig: {

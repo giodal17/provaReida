@@ -4,4 +4,5 @@ export interface AccessJson {
     nTentativi: number,
     success: boolean;
     _id?: string;
+    risposta: string
 }

@@ -1,1 +1,25 @@
-<div class="btn btn-primary btn-block mt-4" (click)="resetAccess()">Clicca per resettare</div>
+<div
+  class="form-group d-flex flex-column flex-justify-content-center align-items-center"
+>
+  <form [formGroup]="form" (ngSubmit)="resetAccess(form)" class="form">
+    <input
+      type="number"
+      class="form-control"
+      id="risposta"
+      formControlName="nTentativi"
+      placeholder="Num Tentativi"
+      autofocus
+    />
+    <input
+      type="text"
+      class="form-control"
+      id="risposta"
+      formControlName="risposta"
+      placeholder="risposta"
+      autofocus
+    /><button [disabled]="!form.valid" class="btn btn-primary btn-block mt-4" type="submit">
+  Clicca per resettare
+</button>
+
+  </form>
+</div>

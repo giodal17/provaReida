@@ -16,6 +16,7 @@ export class QuizComponent implements OnInit {
   title = 'reidaSatWeb';
   form: FormGroup;
   numTentativi: number = -1;
+  risposta: string = "";
   varStorageNumTentativi: string | null = '';
   success = false;
   access = false;
@@ -38,11 +39,14 @@ export class QuizComponent implements OnInit {
 
   ngOnInit(): void {
     this.service.getAccess().subscribe((res) => {
+      console.log(res);
+      
       this.access = res[0].access;
       this.idAccesso = res[0].id;
       this.idOggettoDbRest = res[0]._id;
       this.numTentativi = res[0].nTentativi;
       this.success = res[0].success;
+      this.risposta = res[0].risposta;
 
       if (!this.access && this.idAccesso === '') {
         this.updateFirstAccess();
@@ -70,7 +74,8 @@ export class QuizComponent implements OnInit {
       id: this.idAccesso,
       nTentativi: this.numTentativi,
       success: false,
-      _id: this.idOggettoDbRest
+      _id: this.idOggettoDbRest,
+      risposta: this.risposta
     };
     return this.service.updateAccess(this.idOggettoDbRest, json);
   }
@@ -91,7 +96,7 @@ export class QuizComponent implements OnInit {
           return;
         }
 
-        if (risposta.toLowerCase() == 'reida') {
+        if (risposta.toLowerCase() == this.risposta) {
           this.rispostaSbagliata = false;
           this.success = true;
           const json: AccessJson = {
@@ -99,7 +104,8 @@ export class QuizComponent implements OnInit {
             id: this.idAccesso,
             nTentativi: 0,
             success: true,
-            _id: this.idOggettoDbRest
+            _id: this.idOggettoDbRest,
+            risposta: this.risposta
           };
           this.service.updateAccess(this.idOggettoDbRest, json).subscribe({
             next: () => {
@@ -130,7 +136,8 @@ export class QuizComponent implements OnInit {
       id: Math.round(Math.random() * 1000000) + '',
       nTentativi: 3,
       success: false,
-      _id: this.idOggettoDbRest
+      _id: this.idOggettoDbRest,
+      risposta: this.risposta
     };
     this.idAccesso = json.id + '';
     localStorage.setItem('idAccesso', this.idAccesso);
